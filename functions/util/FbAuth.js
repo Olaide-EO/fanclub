@@ -8,8 +8,9 @@ module.exports = (req, res, next) => {
         console.error('No token found')
         return res.status(403).json({ error: 'Unauthorized'});
     }
-    admin.auth().verifyIdToken(idToken)
-           .then(decodedToken => {
+     admin.auth()
+          .verifyIdToken(idToken)
+          .then(decodedToken => {
                req.user = decodedToken;
                console.log(decodedToken);
                return db.collection('users')
@@ -19,6 +20,7 @@ module.exports = (req, res, next) => {
            })
            .then(data => {
                req.user.handle = data.docs[0].data().handle;
+               req.user.imageUrl = data.docs[0].data().imageUrl
                return next();
            })
            .catch(err => {
