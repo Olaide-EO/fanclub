@@ -1,0 +1,11 @@
+GET https://us-central1-fan-club-1dc95.cloudfunctions.net/api/scream
+
+### 
+POST https://us-central1-fan-club-1dc95.cloudfunctions.net/api/scream
+
+Content-Type: application/json
+
+{
+    "body": "testing rest client",
+    "userHandle": "Olaide New",
+}
