@@ -78,16 +78,18 @@ exports.getScream = (req, res) => {
 // Comment on a scream
 
 exports.commentOnScream = (req, res) => {
-    if(req,body.body.trim() === '') return res.status(400).json({ error: 'Must not be empty'})
+    if(req.body.body.trim() === ''){
+        return res.status(400).json({ error: 'Must not be empty'});
+    }
     
-    const newwComment = {
+    const newComment = {
         body: req.body.body,
         createdAt: new Date().toISOString(),
         screamId: req.params.screamId,
         userHandle: req.user.handle,
         userImage: req.user.imageUrl
     };
-    db.doc(`/screams/${req.params.screams}`).get()
+    db.doc(`/scream/${req.params.screamId}`).get()
       .then(doc => {
           if(!doc.exists){
               return res.status(404).json({ error: 'Scream not found'});
@@ -95,7 +97,7 @@ exports.commentOnScream = (req, res) => {
           return db.collection('comments').add(newComment);
       })
       .then(() => {
-          res.json(newComment);
+        return  res.json(newComment);
       })
       .catch(err => {
           console.log(err);
