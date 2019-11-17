@@ -29,14 +29,19 @@ exports.postOneScream =  (req, res) => {
     const newScream = {
        body: req.body.body,
        userHandle: req.user.handle,
-       createdAt: admin.firestore.Timestamp.fromDate(new Date())
+       userImage: req.user.imageUrl,
+       createdAt: new Date().toISOString(),
+       likeCount: 0,
+       commentCount: 0
    };
 
        db
         .collection('scream')
         .add(newScream)
         .then((doc) => {
-        return  res.json({message: `document ${doc.id} created successfully`});
+        const resScream =  newScream;
+        resScream.screamId = doc.id;
+        return  res.json(resScream);
         })
         .catch((err) => {
            console.log(err);
