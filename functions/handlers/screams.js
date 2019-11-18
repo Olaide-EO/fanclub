@@ -203,8 +203,8 @@ exports.unlikeScream = (req, res) => {
 
 }
 
-exports.deleteeteScream = (req, res) => {
-    const document = db.doc(`/screams/${req.params.screamId}`);
+exports.deleteScream = (req, res) => {
+    const document = db.doc(`/scream/${req.params.screamId}`);
     document.get()
     .then(doc=> {
         if(!doc.exists){
