@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable promise/always-return */
 const functions = require('firebase-functions');
 
@@ -21,6 +22,8 @@ const {
     uploadImage, 
     addUserDetails, 
     getAuthenticatedUser,
+    getUserDetails,
+    markNotificationsRead
   } = require('./handlers/users');
 
 
@@ -48,6 +51,9 @@ app.post('/login', login)
 app.post('/user/image', FBAuth, uploadImage)
 app.post('/user', FBAuth, addUserDetails);
 app.get('/user', FBAuth, getAuthenticatedUser)
+app.get('/user/:handle', getUserDetails);
+app.post('/notifications', FBAuth, markNotificationsRead);
+
 // eslint-disable-next-line consistent-return
 
 
@@ -79,7 +85,7 @@ exports.createNotificationOnLike = functions.firestore.document('likes/{id}')
        })
 
 exports.deleteNotificationOnUnLike = functions
-    firestore.document('likes/{id}')
+    .firestore.document('likes/{id}')
              .onDelete((snapshot) => {
                db.doc(`/notifications/${snapshot.id}`)
                  .delete()
