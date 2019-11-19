@@ -160,7 +160,7 @@ exports.getAuthenticatedUser = (req, res) => {
           data.forEach(doc => {
               userData.likes.push(doc.data());
           });
-          return db.collection('notifications').where('recipient', '==', 'req.user.handle')
+          return db.collection('notifications').where('recipient', '==', req.user.handle)
           .orderBy('createdAt', 'desc').limit(10).get();
       })
       .then((data) => {
