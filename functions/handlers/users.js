@@ -57,7 +57,7 @@ exports.signUp = (req, res) => {
           if(err.code === 'auth/email-already-in-use'){
               return res.status(400).json({ email: 'Email is already in use'});
           } else {
-            return res.status(500).json({ general: 'Something went wrong' });
+            return res.status(500).json({ general: 'Something went wrong, please try again' });
           }
           
       })
@@ -83,9 +83,10 @@ exports.login = (req, res) => {
             })
             .catch(err => {
                 console.error(err);
-                if(err.code === 'auth/wrong-password'){
-                    return res.status(403).json({ general: 'Wrong credentials, please try again'})
-                }else return res.status(500).json({ error: err.code});
+                // auth/wrong-password
+                // auth/user-not-user
+             return res.status(403)
+                       .json({ general: 'Wrong credentials, please try again'});
             })
 }
 
@@ -114,7 +115,7 @@ exports.getUserDetails = (req, res) => {
       .then(doc => {
           if(doc.exists){
               userData.user = doc.data();
-              return db.collection('screams').where('userHandle', '==', req.params.handle)
+              return db.collection('scream').where('userHandle', '==', req.params.handle)
                        .orderBy('createdAt', 'desc')
                        .get();
           }
@@ -240,8 +241,7 @@ exports.markNotificationsRead = (req, res) => {
         const notification = db.doc(`/notifications/${notificationId}`);
         batch.update(notification, { read: true });
     });
-    batch
-         .commit()
+    batch.commit()
          .then(() => {
              return res.json({ message: 'Notifications marked read'});
          })
