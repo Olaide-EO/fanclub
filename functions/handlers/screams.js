@@ -13,7 +13,7 @@ exports.getAllScreams = (req, res) => {
             screamId: doc.id,
             body: doc.data().body,
             userHandle: doc.data().userHandle,
-            createdAt: new Date().toISOString(),
+            createdAt: doc.data().createdAt,
             commentCount: doc.data().commentCount,
             likeCount: doc.data().likeCount,
             userImage: doc.data().userImage
