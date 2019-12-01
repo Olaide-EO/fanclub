@@ -5,6 +5,10 @@ const functions = require('firebase-functions');
 const app = require('express')();
 
 const FBAuth = require('./util/FbAuth');
+
+const cors = require('cors');
+app.use(cors());
+
 const { db } = require('./util/admin');
 
 const { 
@@ -61,7 +65,7 @@ app.post('/notifications', FBAuth, markNotificationsRead);
 exports.api = functions.https.onRequest(app);
 
 
-exports.createNotificationOnLike = functions.firestore.document('likes/{id}')
+exports.createNotificationOnLike = functions.firestore.document('/likes/:id')
        .onCreate((snapshot) => {
        return  db.doc(`/scream/${snapshot.data().screamId}`).get()
            .then(doc => {
@@ -82,7 +86,7 @@ exports.createNotificationOnLike = functions.firestore.document('likes/{id}')
        })
 
 exports.deleteNotificationOnUnLike = functions
-    .firestore.document('likes/{id}')
+    .firestore.document('/likes/:id')
              .onDelete((snapshot) => {
         return   db.doc(`/notifications/${snapshot.id}`)
                  .delete()
@@ -93,7 +97,7 @@ exports.deleteNotificationOnUnLike = functions
              })
 
 exports.createNotificationOnComment = functions
-    .firestore.document('comments/{id}')
+    .firestore.document('/comments/:id')
     .onCreate((snapshot) => {
    return db.doc(`/scream/${snapshot.data().screamId}`).get()
         .then((doc) => {
@@ -115,7 +119,7 @@ exports.createNotificationOnComment = functions
     })
 
 exports.onUserImageChange = functions.firestore
-       .document('/users/{userId}')
+       .document('/users/:userId')
        .onUpdate((change) => {
          console.log(change.before.data());
          console.log(change.after.data());
